@@ -110,26 +110,26 @@
   .col-main { min-width: 0; }
   .col-map { position: relative; }
   .map-sticky {
-    position: sticky; top: 10vh; height: 80vh;
-    display:flex; flex-direction: column; justify-content: center;
+    position: sticky; top: 12vh;
+    display:flex; flex-direction: column; gap: 1.1rem; justify-content: flex-start;
   }
   .map-frame {
     border: 1px solid var(--line); border-radius: 4px; background: var(--bg-panel);
-    padding: 1.6rem; position: relative; overflow: hidden;
+    padding: 1.3rem 1.4rem; position: relative; overflow: hidden;
   }
   .map-frame::before {
     content: ""; position: absolute; inset:0;
     background: radial-gradient(circle at 50% 40%, rgba(179,55,46,0.08), transparent 65%);
   }
-  .map-head { display:flex; justify-content: space-between; align-items:baseline; margin-bottom: 0.9rem; position: relative; }
-  .map-title { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
-  .map-counter { font-family: var(--mono); font-size: 1.6rem; color: var(--red-bright); font-variant-numeric: tabular-nums; }
-  .map-counter-lbl { font-family: var(--mono); font-size: 0.62rem; color: var(--muted); text-align:right; margin-top: 0.15rem;}
-  svg.contagion { width: 100%; height: 240px; position: relative; }
+  .map-head { display:flex; justify-content: space-between; align-items:baseline; margin-bottom: 0.7rem; position: relative; }
+  .map-title { font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .map-counter { font-family: var(--mono); font-size: 1.4rem; color: var(--red-bright); font-variant-numeric: tabular-nums; }
+  .map-counter-lbl { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); text-align:right; margin-top: 0.15rem;}
+  svg.contagion { width: 100%; height: 165px; position: relative; }
   .node { fill: var(--red-bright); opacity: 0; transform-origin: center; }
   .node.origin { fill: var(--paper); }
   .edge { stroke: var(--red); stroke-width: 0.8; opacity: 0; }
-  .map-meta { display:flex; justify-content: space-between; margin-top: 1rem; font-family: var(--mono); font-size: 0.65rem; color: var(--muted); position:relative; }
+  .map-meta { display:flex; justify-content: space-between; margin-top: 0.8rem; font-family: var(--mono); font-size: 0.62rem; color: var(--muted); position:relative; }
   .map-meta .hour-badge { color: var(--paper); }
 
   /* ================= SECTION ================= */
@@ -153,20 +153,47 @@
   }
 
   /* ---- post card ---- */
-  .postcard-stage { position: relative; height: 340px; margin: 3rem 0 1rem; perspective: 900px; }
+  .postcard-stage { position: relative; height: 236px; margin: 0; perspective: 900px; width: 100%; }
   .postcard {
-    position:absolute; top:0; left:0; width: 340px; max-width: 86vw;
-    background: var(--paper); color: #1a1712; border-radius: 6px; padding: 1.1rem 1.2rem;
+    position:absolute; top:0; left:0; width: 100%;
+    background: var(--paper); color: #1a1712; border-radius: 6px; padding: 1rem 1.1rem;
     box-shadow: 0 20px 40px -12px rgba(0,0,0,0.6);
   }
-  .postcard .pc-head { display:flex; align-items:center; gap:0.6rem; margin-bottom:0.7rem; }
-  .postcard .pc-avatar { width: 30px; height:30px; border-radius:50%; background: var(--muted-dim); flex-shrink:0; }
-  .postcard .pc-name { font-family: var(--mono); font-size: 0.72rem; font-weight: 600; }
-  .postcard .pc-handle { font-family: var(--mono); font-size: 0.65rem; color: #6b6555; }
-  .postcard .pc-body { font-size: 0.86rem; line-height: 1.45; font-weight: 500; }
+  .postcard .pc-head { display:flex; align-items:center; gap:0.6rem; margin-bottom:0.6rem; }
+  .postcard .pc-avatar { width: 28px; height:28px; border-radius:50%; background: var(--muted-dim); flex-shrink:0; }
+  .postcard .pc-name { font-family: var(--mono); font-size: 0.68rem; font-weight: 600; }
+  .postcard .pc-handle { font-family: var(--mono); font-size: 0.6rem; color: #6b6555; }
+  .pc-media { display:flex; gap: 0.45rem; margin-bottom: 0.6rem; }
+  .pc-photo {
+    flex: 1; height: 62px; border-radius: 4px; position: relative; overflow: hidden;
+    background: linear-gradient(135deg, #4a5c38 0%, #6b7d47 35%, #8a7548 65%, #5c4a35 100%);
+  }
+  .pc-photo::before {
+    content:""; position:absolute; inset:0;
+    background: repeating-linear-gradient(115deg, rgba(0,0,0,0.08) 0px, rgba(0,0,0,0.08) 2px, transparent 2px, transparent 6px);
+  }
+  .pc-photo .pc-photo-tag {
+    position:absolute; bottom: 3px; left: 4px; font-family: var(--mono); font-size: 0.46rem; letter-spacing:0.02em;
+    color: rgba(255,255,255,0.8); background: rgba(0,0,0,0.4); padding: 1px 4px; border-radius: 2px;
+  }
+  .pc-cert {
+    flex: 1; height: 62px; border-radius: 4px; position: relative; overflow: hidden;
+    background: #efeadf; border: 1px solid rgba(0,0,0,0.1); padding: 6px 7px;
+  }
+  .pc-cert .cert-bar { height: 6px; width: 68%; background: var(--red); border-radius: 1px; margin-bottom: 5px; }
+  .pc-cert .cert-line { height: 3px; background: rgba(26,23,18,0.2); border-radius: 1px; margin-bottom: 4px; }
+  .pc-cert .cert-line:nth-of-type(2) { width: 88%; }
+  .pc-cert .cert-line:nth-of-type(3) { width: 62%; }
+  .pc-cert .cert-seal {
+    position:absolute; right: 6px; bottom: 5px; width: 22px; height: 22px; border-radius: 50%;
+    border: 2px solid rgba(179,55,46,0.55); transform: rotate(-14deg);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .pc-cert .cert-seal span { font-family: var(--mono); font-size: 0.38rem; font-weight: 700; color: rgba(179,55,46,0.7); letter-spacing: 0.02em; }
+  .postcard .pc-body { font-size: 0.76rem; line-height: 1.38; font-weight: 500; }
   .postcard .pc-body .flag { color: var(--red); font-weight: 700; }
-  .postcard .pc-foot { display:flex; gap:1rem; margin-top:0.8rem; font-family: var(--mono); font-size: 0.68rem; color: #6b6555; }
-  .ghost { position:absolute; top:0; left:0; width: 340px; max-width: 86vw; background: var(--paper-dim);
+  .postcard .pc-foot { display:flex; gap:1rem; margin-top:0.6rem; font-family: var(--mono); font-size: 0.62rem; color: #6b6555; }
+  .ghost { position:absolute; top:0; left:0; width: 100%; background: var(--paper-dim);
     border-radius: 6px; height: 100%; opacity: 0; filter: blur(0.3px); }
 
   /* ---- amplify diagram ---- */
@@ -519,22 +546,6 @@
       <h2 class="reveal split-heading">A photo, a fake certificate, and a name that sounds official.</h2>
       <p class="reveal"><strong>@HealthWatch_Anon</strong> — an account created nine days earlier, forty followers — posts a photo of wilted spinach beside a forged lab document. The caption claims a local health department has confirmed contamination at <strong>Green Valley Farms</strong>. It hasn't. No such report exists.</p>
       <p class="reveal">The account has no history, no credentials, and no byline. It doesn't need one. The claim is designed to feel checkable without ever being checked.</p>
-
-      <div class="postcard-stage" id="stage0">
-        <div class="ghost" id="ghost1"></div>
-        <div class="ghost" id="ghost2"></div>
-        <div class="postcard" id="postcard0">
-          <div class="pc-head">
-            <div class="pc-avatar"></div>
-            <div>
-              <div class="pc-name">HealthWatch Anon</div>
-              <div class="pc-handle">@HealthWatch_Anon · 40 followers</div>
-            </div>
-          </div>
-          <div class="pc-body" id="postBody">BREAKING: Lab confirms <span class="flag">E. coli contamination</span> at Green Valley Farms. <span class="flag">3 hospitalized.</span> Do not eat this spinach.</div>
-          <div class="pc-foot"><span id="pcLikes">2 likes</span><span id="pcShares">0 reposts</span></div>
-        </div>
-      </div>
     </section>
 
     <!-- HOUR 1 -->
@@ -676,6 +687,33 @@
 
   <div class="col-map">
     <div class="map-sticky">
+
+      <div class="postcard-stage" id="stage0">
+        <div class="ghost" id="ghost1"></div>
+        <div class="ghost" id="ghost2"></div>
+        <div class="postcard" id="postcard0">
+          <div class="pc-head">
+            <div class="pc-avatar"></div>
+            <div>
+              <div class="pc-name">HealthWatch Anon</div>
+              <div class="pc-handle">@HealthWatch_Anon · 40 followers</div>
+            </div>
+          </div>
+          <div class="pc-media">
+            <div class="pc-photo"><span class="pc-photo-tag">IMG_0391</span></div>
+            <div class="pc-cert">
+              <div class="cert-bar"></div>
+              <div class="cert-line"></div>
+              <div class="cert-line"></div>
+              <div class="cert-line"></div>
+              <div class="cert-seal"><span>OK</span></div>
+            </div>
+          </div>
+          <div class="pc-body" id="postBody">BREAKING: Lab confirms <span class="flag">E. coli contamination</span> at Green Valley Farms. <span class="flag">3 hospitalized.</span> Do not eat this spinach.</div>
+          <div class="pc-foot"><span id="pcLikes">2 likes</span><span id="pcShares">0 reposts</span></div>
+        </div>
+      </div>
+
       <div class="map-frame">
         <div class="map-head">
           <div>
@@ -686,7 +724,7 @@
             <div class="map-counter-lbl">people reached</div>
           </div>
         </div>
-        <svg class="contagion" id="contagionSvg" viewBox="0 0 340 240" preserveAspectRatio="xMidYMid meet"></svg>
+        <svg class="contagion" id="contagionSvg" viewBox="0 0 340 170" preserveAspectRatio="xMidYMid meet"></svg>
         <div class="map-meta">
           <span>status: <span class="hour-badge" id="mapStatus">unverified</span></span>
           <span id="mapHour">hour 0</span>
@@ -971,7 +1009,7 @@ gsap.utils.toArray(".reveal").forEach((el) => {
 /* ---------------- contagion map ---------------- */
 const svgNS = "http://www.w3.org/2000/svg";
 const svg = document.getElementById('contagionSvg');
-const cx = 170, cy = 120;
+const cx = 170, cy = 85;
 
 // deterministic pseudo-random layout
 function seeded(i){ const x = Math.sin(i*999.7)*10000; return x - Math.floor(x); }
@@ -980,7 +1018,7 @@ const TOTAL_NODES = 42;
 const nodes = [];
 for(let i=0;i<TOTAL_NODES;i++){
   const angle = seeded(i)*Math.PI*2;
-  const radius = 18 + seeded(i+50)*105;
+  const radius = 14 + seeded(i+50)*72;
   const x = cx + Math.cos(angle)*radius;
   const y = cy + Math.sin(angle)*radius*0.85;
   nodes.push({x,y});
@@ -1145,24 +1183,16 @@ function updatePostcard(progress){
   }
 }
 
-/* pin the postcard stage while hours 0-6 play out, on desktop only, fully scrubbed */
-if(window.innerWidth > 900 && !reduceMotion){
-  ScrollTrigger.create({
-    trigger: "#stage0",
-    start: "top 30%",
-    endTrigger: "section[data-hour='6']",
-    end: "bottom 60%",
-    pin: "#stage0",
-    pinSpacing: false,
-    scrub: 0.3,
-    onUpdate: (self) => updatePostcard(self.progress)
-  });
-} else {
-  ScrollTrigger.create({
-    trigger: "#stage0", start: "top 80%", endTrigger: "section[data-hour='6']", end: "bottom 40%",
-    scrub: 0.3, onUpdate: (self) => updatePostcard(self.progress)
-  });
-}
+/* drive the postcard's mutation from the article's own scroll distance (hour 0 -> hour 6),
+   while the card itself just sits sticky in the right column — no pin, so nothing can overlap */
+ScrollTrigger.create({
+  trigger: "section[data-hour='0']",
+  start: "top top",
+  endTrigger: "section[data-hour='6']",
+  end: "bottom top",
+  scrub: 0.3,
+  onUpdate: (self) => updatePostcard(self.progress)
+});
 
 /* ---------------- harm crates: reveal count scrubs directly with scroll ---------------- */
 const harmContainer = document.getElementById('harmCrates');
