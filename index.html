@@ -166,28 +166,31 @@
   .day-btn { margin-top:1.4rem; font-family:var(--mono); font-size:0.72rem; padding:0.75rem 1.3rem; border-radius:5px; border:1px solid var(--muted-dim); background:transparent; color:var(--text); cursor:pointer; }
   .day-btn:hover { border-color:var(--text); }
 
-  /* ---- look closer slider (real photo vs AI image) ---- */
-  .slider-wrap { max-width:420px; margin-top:2rem; }
-  .slider-frame {
-    position:relative; width:100%; aspect-ratio:4/5; border-radius:8px; overflow:hidden;
-    border:1px solid var(--line); cursor:ew-resize; background:#0d1117;
-    touch-action:pan-y;            /* horizontal drag moves the slider; vertical swipe still scrolls the page */
-    user-select:none; -webkit-user-select:none; outline:none;
-  }
-  .slider-frame:focus-visible { box-shadow:0 0 0 2px var(--green-bright); }
-  .slider-side { position:absolute; inset:0; background:#0d1117; }
-  .slider-side img {
-    position:absolute; inset:0; width:100%; height:100%;
-    object-fit:cover; object-position:50% 30%;
-    pointer-events:none; -webkit-user-drag:none;
-  }
-  .slider-side.real { clip-path:inset(0 50% 0 0); }   /* JS updates this as you drag */
-  .slider-handle { position:absolute; top:0; bottom:0; width:2px; background:var(--text); left:50%; pointer-events:none; }
-  .slider-handle::after { content:"⟷"; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:var(--text); color:#0a0e14; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.8rem; }
-  .slider-label { position:absolute; top:8px; font-family:var(--mono); font-size:0.55rem; text-transform:uppercase; padding:2px 6px; background:rgba(0,0,0,0.55); border-radius:2px; pointer-events:none; }
-  .slider-label.l { left:8px; color:var(--green-bright); }
-  .slider-label.r { right:8px; color:var(--red-bright); }
-  .slider-caption { font-family:var(--mono); font-size:0.62rem; color:var(--muted-dim); margin-top:0.8rem; line-height:1.6; max-width:420px; }
+  /* ---- which one is real? (pick game) ---- */
+  .pick-game { max-width:520px; margin-top:2rem; }
+  .pick-progress { font-family:var(--mono); font-size:0.66rem; color:var(--muted); margin-bottom:0.8rem; text-transform:uppercase; letter-spacing:0.08em; }
+  .pick-pair { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .pick-card { position:relative; padding:0; border:2px solid var(--line); border-radius:8px; overflow:hidden; background:#0d1117; cursor:pointer; aspect-ratio:3/4; transition:border-color .2s ease, transform .2s ease; }
+  .pick-card:hover:not(:disabled) { border-color:var(--text); transform:translateY(-2px); }
+  .pick-card:focus-visible { outline:2px solid var(--green-bright); outline-offset:2px; }
+  .pick-card:disabled { cursor:default; }
+  .pick-card img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 25%; pointer-events:none; -webkit-user-drag:none; }
+  .pick-badge { position:absolute; left:6px; right:6px; bottom:6px; font-family:var(--mono); font-size:0.6rem; text-transform:uppercase; text-align:center; padding:4px 6px; border-radius:3px; background:rgba(0,0,0,0.75); opacity:0; transition:opacity .3s ease; }
+  .pick-card.is-real { border-color:var(--green); }
+  .pick-card.is-real .pick-badge { opacity:1; color:var(--green-bright); }
+  .pick-card.is-ai { border-color:var(--red); }
+  .pick-card.is-ai .pick-badge { opacity:1; color:var(--red-bright); }
+  .pick-card.picked { box-shadow:0 0 0 2px var(--text); }
+  .pick-fb { display:none; margin-top:1rem; padding-top:1rem; border-top:1px solid var(--line); font-size:0.9rem; color:var(--muted); font-weight:300; }
+  .pick-fb.show { display:block; }
+  .pick-fb strong { color:var(--text); font-weight:500; }
+  .pick-next, .pick-replay { margin-top:1rem; font-family:var(--mono); font-size:0.7rem; padding:0.7rem 1.2rem; border-radius:5px; border:1px solid var(--muted-dim); background:transparent; color:var(--text); cursor:pointer; }
+  .pick-next { display:none; }
+  .pick-next.show { display:inline-block; }
+  .pick-final { display:none; padding:1.5rem 0; }
+  .pick-score { font-family:var(--mono); font-size:2.6rem; color:var(--text); }
+  .pick-msg { margin-top:0.8rem; font-size:0.95rem; color:var(--muted); font-weight:300; }
+  .pick-caption { font-family:var(--mono); font-size:0.62rem; color:var(--muted-dim); margin-top:0.8rem; line-height:1.6; max-width:520px; }
 
   /* ---- this is real (news card) ---- */
   .news-card {
@@ -432,29 +435,34 @@
       <p class="reveal" style="margin-top:0.9rem; font-size:0.8rem; color:var(--muted-dim);">There was nothing to tap into. Every tile was synthetic from the first second.</p>
     </section>
 
-    <!-- LOOK CLOSER -->
+    <!-- LOOK CLOSER: which one is real? -->
     <section class="section" data-beat="3">
       <span class="kicker">Look closer</span>
       <div class="tag-row"><span class="tag">Try it</span></div>
-      <h2 class="reveal">Even side by side, the line is thin.</h2>
-      <p class="reveal">Drag the handle. One of these is a real photograph and the other was generated by AI. Look at the hands, the hair edges and the coat fabric.</p>
-      <div class="slider-wrap reveal">
-        <div class="slider-frame" id="sliderFrame" role="slider" tabindex="0"
-             aria-label="Compare a real photo with an AI-generated image"
-             aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
-          <!-- bottom layer: the AI-generated image (visible on the right) -->
-          <div class="slider-side fake">
-            <img src="images/synthetic.jpg" alt="AI-generated image of a woman in a red coat holding a wooden case" draggable="false">
+      <h2 class="reveal">Which one is real?</h2>
+      <p class="reveal">Three pairs of faces. In each pair, one is a real photograph and the other was generated by AI. Tap the one you think is real.</p>
+      <div class="pick-game reveal" id="pickGame">
+        <div id="pickPlay">
+          <div class="pick-progress" id="pickProgress">Pair 1 of 3</div>
+          <div class="pick-pair">
+            <button type="button" class="pick-card" id="pickA" aria-label="Choose the left photo as the real one">
+              <img id="pickImgA" src="" alt="Portrait, left option" draggable="false">
+              <span class="pick-badge" id="pickBadgeA"></span>
+            </button>
+            <button type="button" class="pick-card" id="pickB" aria-label="Choose the right photo as the real one">
+              <img id="pickImgB" src="" alt="Portrait, right option" draggable="false">
+              <span class="pick-badge" id="pickBadgeB"></span>
+            </button>
           </div>
-          <!-- top layer: the real photo (revealed from the left as you drag) -->
-          <div class="slider-side real" id="sliderReal">
-            <img src="images/real.jpg" alt="Real photograph of a woman in a red coat holding a wooden case" draggable="false">
-          </div>
-          <div class="slider-handle" id="sliderHandle"></div>
-          <div class="slider-label l">Real photo</div>
-          <div class="slider-label r">AI-generated</div>
+          <div class="pick-fb" id="pickFb"></div>
+          <button type="button" class="pick-next" id="pickNext">Next pair →</button>
         </div>
-        <p class="slider-caption">A real photo and an AI-generated image. In Chen's case it was live video, which is far harder to scrutinise.</p>
+        <div class="pick-final" id="pickFinal">
+          <div class="pick-score" id="pickScore">0/3</div>
+          <p class="pick-msg" id="pickMsg"></p>
+          <button type="button" class="pick-replay" id="pickReplay">Play again</button>
+        </div>
+        <p class="pick-caption">Real photos and AI-generated images. In Chen's case it was live video, which is far harder to scrutinise.</p>
       </div>
     </section>
 
@@ -748,45 +756,74 @@ document.getElementById('fastForwardBtn').addEventListener('click', function(){
   }, cards.length*350 + 900);
 });
 
-/* ---------------- look closer slider (real photo vs AI image) ---------------- */
+/* ---------------- which one is real? (3 pairs) ---------------- */
 (function(){
-  const frame  = document.getElementById('sliderFrame');
-  const real   = document.getElementById('sliderReal');
-  const handle = document.getElementById('sliderHandle');
-  let dragging = false, pos = 50;
+  const pairs = [
+    { real:'images/pair1-real.jpg', ai:'images/pair1-ai.jpg' },
+    { real:'images/pair2-real.jpg', ai:'images/pair2-ai.jpg' },
+    { real:'images/pair3-real.jpg', ai:'images/pair3-ai.jpg' }
+  ];
+  pairs.forEach(p => { new Image().src = p.real; new Image().src = p.ai; });
 
-  function apply(pct){
-    pos = Math.min(100, Math.max(0, pct));
-    real.style.clipPath = `inset(0 ${100 - pos}% 0 0)`;   // real photo shows on the left of the handle
-    handle.style.left = pos + '%';
-    frame.setAttribute('aria-valuenow', Math.round(pos));
+  const $ = id => document.getElementById(id);
+  const cardA = $('pickA'), cardB = $('pickB');
+  const imgA = $('pickImgA'), imgB = $('pickImgB');
+  const badgeA = $('pickBadgeA'), badgeB = $('pickBadgeB');
+  const fb = $('pickFb'), next = $('pickNext'), progress = $('pickProgress');
+  const play = $('pickPlay'), final = $('pickFinal');
+  let idx = 0, score = 0, answered = false, realIsA = true;
+
+  function render(){
+    answered = false;
+    const p = pairs[idx];
+    realIsA = Math.random() < 0.5;            // randomise which side the real photo is on
+    imgA.src = realIsA ? p.real : p.ai;
+    imgB.src = realIsA ? p.ai : p.real;
+    [cardA, cardB].forEach(c => { c.classList.remove('is-real','is-ai','picked'); c.disabled = false; });
+    badgeA.textContent = ''; badgeB.textContent = '';
+    fb.classList.remove('show'); fb.innerHTML = '';
+    next.classList.remove('show');
+    next.textContent = idx === pairs.length - 1 ? 'See your result →' : 'Next pair →';
+    progress.textContent = `Pair ${idx + 1} of ${pairs.length}`;
   }
-  function setFromX(clientX){
-    const rect = frame.getBoundingClientRect();
-    apply(((clientX - rect.left) / rect.width) * 100);
+
+  function choose(pickedA){
+    if(answered) return;
+    answered = true;
+    const correct = (pickedA === realIsA);
+    if(correct) score++;
+    cardA.classList.add(realIsA ? 'is-real' : 'is-ai');
+    cardB.classList.add(realIsA ? 'is-ai' : 'is-real');
+    badgeA.textContent = realIsA ? 'Real photo' : 'AI-generated';
+    badgeB.textContent = realIsA ? 'AI-generated' : 'Real photo';
+    (pickedA ? cardA : cardB).classList.add('picked');
+    cardA.disabled = true; cardB.disabled = true;
+    fb.innerHTML = correct
+      ? '<strong>You spotted the real one.</strong> Hold that thought for the next pair.'
+      : '<strong>That one was AI-generated.</strong> It fooled you, and it fools most people too.';
+    fb.classList.add('show');
+    next.classList.add('show');
   }
 
-  frame.addEventListener('pointerdown', e => { dragging = true; frame.setPointerCapture(e.pointerId); setFromX(e.clientX); });
-  frame.addEventListener('pointermove', e => { if (dragging) setFromX(e.clientX); });
-  frame.addEventListener('pointerup',     () => { dragging = false; });
-  frame.addEventListener('pointercancel', () => { dragging = false; });
+  function finish(){
+    play.style.display = 'none';
+    final.style.display = 'block';
+    $('pickScore').textContent = `${score}/${pairs.length}`;
+    $('pickMsg').textContent =
+      score === pairs.length ? "Three for three, on still photos, with no pressure. Chen had live video, familiar faces and a deadline."
+      : score === 0 ? "Fooled every time. That's the point: looking harder isn't a reliable defence."
+      : "Some you caught, some you didn't. Chen faced this live, with people he trusted, and no time to look closely.";
+  }
 
-  // keyboard support: left/right arrows move the handle
-  frame.addEventListener('keydown', e => {
-    if (e.key === 'ArrowLeft')  { apply(pos - 5); e.preventDefault(); }
-    if (e.key === 'ArrowRight') { apply(pos + 5); e.preventDefault(); }
+  cardA.addEventListener('click', () => choose(true));
+  cardB.addEventListener('click', () => choose(false));
+  next.addEventListener('click', () => { idx++; if(idx >= pairs.length) finish(); else render(); });
+  $('pickReplay').addEventListener('click', () => {
+    idx = 0; score = 0;
+    final.style.display = 'none'; play.style.display = 'block';
+    render();
   });
-
-  // one-time wiggle so people notice it's draggable
-  if (!reduceMotion) {
-    ScrollTrigger.create({ trigger: frame, start: 'top 70%', once: true, onEnter: () => {
-      const o = { p: 50 };
-      gsap.timeline()
-        .to(o, { p: 30, duration: 0.6, ease: 'power2.inOut', onUpdate: () => apply(o.p) })
-        .to(o, { p: 70, duration: 0.9, ease: 'power2.inOut', onUpdate: () => apply(o.p) })
-        .to(o, { p: 50, duration: 0.6, ease: 'power2.inOut', onUpdate: () => apply(o.p) });
-    }});
-  }
+  render();
 })();
 
 /* ---------------- news figure count-up ---------------- */
